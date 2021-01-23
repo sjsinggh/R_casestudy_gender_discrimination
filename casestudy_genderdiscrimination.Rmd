@@ -1,0 +1,129 @@
+---
+title: "Gender Discrimination Case Study"
+output: html_notebook
+---
+<br>
+
+### • In this case study, there are 48 identical resumes, with 24 noted as belonging to women and 24 belonging to men. Of the 48, a total of 35 people were promoted.
+
+### • If promotion and gender are independent, meaning that receiving a promotion has nothing to do with the person being a woman or man, then we would expect the promotion rate for women to be equal to the promotion rate for men. (Remember that the 48 resumes are identical in every way other than gender of applicant.) That is,
+### *(number of women promoted / total number of women) = (number of men promoted / total number of men)*
+
+### • This is the same as saying that we would expect the difference between the two promotion rates to be 0.
+
+
+
+<br>
+
+
+## ○ Simulating a single event.
+
+<br>
+
+
+#### >> Creating a vector called promotions, using 0’s and 1’s to represent the proper number of promotions + no-promotions in the case study.
+
+```{r}
+promotions <- rep(0:1, c(13,35))
+
+print(promotions)
+```
+<br>
+
+#### >> Taking a random sample of 24 elements from promotions and store it in a variable called women. Then taking the sum of this vector and store it in a variable called women_promoted.
+
+```{r}
+
+women = sample(promotions ,replace = FALSE, size = 24)
+
+women_promoted = sum(women)
+
+print(women_promoted)
+
+```
+<br>
+
+#### >> Now determining the number of men promoted and save to a variable called men_promoted
+
+```{r}
+men_promoted = 35 - women_promoted
+
+print(men_promoted)
+```
+
+
+<br>
+
+#### >> Determining the difference for a sigle simulation.
+
+```{r}
+diff = (men_promoted/24 ) - (women_promoted/24)
+
+print(diff)
+```
+
+<br>
+
+## ○ Now simulating 50000 events
+
+
+<br>
+
+#### >> Creating a function promotion_sim to generate n number of simulations.
+`
+
+```{r}
+
+promotion_sim <- function(runs){
+  sim_results <- c()
+  for (i in 1:runs) {
+    promotions <- rep(0:1, c(13,35))
+    women <- sample(promotions ,replace = FALSE, size = 24)
+    women_promoted <- sum(women)
+    men_promoted <- 35 - women_promoted
+    diff <- (men_promoted/24 ) - (women_promoted/24)
+    sim_results <- c(sim_results, diff)
+  }
+  return(sim_results)
+}
+
+```
+
+
+<br>
+
+
+#### >> Getting the difference for 50000 runs and plotting the distribution
+
+
+```{r}
+simulations <- promotion_sim(50000)
+hist(simulations, breaks = 10)
+```
+<br>
+
+
+#### Determining the number of times the difference in promotion rate was more than or equal to 0.292 as mentioned in the case study
+
+```{r}
+
+sum(simulations >= 0.292)
+
+```
+
+<br>
+
+
+#### Also getting the ratio of the same out of 50000 simulations
+
+```{r}
+print(208/50000)
+```
+
+
+
+
+> - The result in the above exercise indicates that only **0.416 ≈ 0.42%** (or 208 times) of the 50000 simulations resulted in the promotion rate being greater than or equal to 0.292. 
+- Assuming that the results in the gender discrimination experiment are due to chance, then it would surely be a rare event with a probability of 0.00416 as per the simulations generated.
+
+
